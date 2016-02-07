@@ -9,13 +9,13 @@ class HTMLParser
 
     public function __construct($url)
     {
-        $this->htmlurl = $url;
+        $this->htmlurl = $url; //if we need to get the url sometime.
 
         $string = file_get_contents($url);
 
         $doc = new DOMDocument();
         $doc->loadHTML('<?xml encoding="UTF-8">' . $string);
-        $elements = array('h1', 'img', 'p');
+        $elements = array('h1', 'img', 'p'); //tags we are searching for.
 
         foreach ($elements as $element) {
             $imageId = 0;
@@ -27,8 +27,8 @@ class HTMLParser
                 }
                 if ($element == 'img') {
                     $urlImg = $domelement->getAttribute('src');
-                    $pattern = '/http.*/';
-                    $img_formats = array("jpg", "jpeg", "gif", "tiff");//Etc. . . 
+                    $pattern = '/http.*/';          //regex to take the correct jpg image url.
+                    $img_formats = array("jpg", "jpeg", "gif", "tiff"); //Not taking the png imaging because they are usually the logs.
                     preg_match($pattern, $urlImg, $url);
                     $urlPath = $url[0];
                     $path_info = pathinfo($urlPath);
@@ -74,7 +74,7 @@ $htmlParser = new HTMLParser($_POST["cnnurl"]);
 echo $htmlParser->getHeader();
 
 $imagePlaceHolder = $htmlParser->getImageHolder();
-echo $imagePlaceHolder[0];
+echo $imagePlaceHolder[0]; // Saw that only the first position image is relavent in most of the articles. Hence using only 0 instead of the for loop.
 
 $bodyHolder = $htmlParser->getBodyHolder();
 foreach ($bodyHolder as $content) {
